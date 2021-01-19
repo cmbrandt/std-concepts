@@ -11,7 +11,6 @@ namespace cmb {
 //
 // Language-related concepts
 
-// General
 
 // concept same_as
 template <class T, class U>
@@ -34,7 +33,9 @@ template <class T, class U>
 concept common_with = void;
 
 
+//
 // Arithmetic concepts
+
 template <class T>
 concept integral = void;
 
@@ -63,14 +64,44 @@ concept swappable_with = void;
 template <class T>
 concept destructable = void;
 
+// concept constructable_from
+template <class T, class... Args>
+concept constructable_from = void;
+
+// concept default_initializable
+template <class T>
+concept default_initializable = void;
+
+// concept move_constructable
+template <class T>
+concept move_constructable = void;
+
+// concept copy_constructable
+template <class T>
+concept copy_constructable = void;
+
+
 //
 // Comparison concepts
 
+// concept equality_comparable
+template <class T>
+concept equality_comparable = void;
 
+template <class T, class U>
+concept equality_comparable_with = void;
+
+// concept totally_ordered
+template <class T>
+concept totally_ordered = void;
+
+template <class T, class U>
+concept totally_ordered_with = void;
 
 
 //
 // Object concepts
+
 template <class T>
 concept movalbe = void;
 
