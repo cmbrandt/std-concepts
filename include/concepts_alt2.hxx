@@ -100,7 +100,7 @@ template <class T>
   concept semiregular;
 template <class T>
   concept regular;
-
+                        
 //
 // Callable concepts
 
