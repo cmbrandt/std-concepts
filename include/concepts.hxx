@@ -38,22 +38,22 @@ template <class T, class U>
 
 // concept common_with
 template <class T>
-  concept integral = true;
+  concept integral = std::is_integral_v<T>;
 
 
 // concept signed_integral
 template <class T>
-  concept signed_integral = true;
+  concept signed_integral = std::is_integral_v<T> and std::is_signed_v<T>;
 
 
 // concept unsigned_integral
 template <class T>
-  concept unsigned_integral = true;
+  concept unsigned_integral = std::is_integral_v<T> and !std::is_signed_v<T>;
 
 
 // concept floating_point
 template <class T>
-  concept floating_point = true;
+  concept floating_point = std::is_floating_point_v<T>;
 
 
 // concept assignable_from
