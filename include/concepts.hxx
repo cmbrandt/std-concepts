@@ -3,35 +3,45 @@
 #ifndef CONCEPTS_HXX
 #define CONCEPTS_HXX
 
+#include <functional>
 #include <type_traits>
+#include <utility>
 
 
 namespace cmb {
 
 //
-// General language concepts
+// Language-related concepts
 
 // concept same_as
+namespace detail
+{
+  template <class T, class U>
+    concept same_as_impl = std::is_same_v<T, U>;
+}
 template <class T, class U>
-  concept same_as = true;
+  concept same_as = cmb::detail::same_as_impl<T, U>
+                and cmb::detail::same_as_impl<U, T>;
 
 
 // concept derived_from
 template <class Derived, class Base>
-  concept derived_from = true;
+  concept derived_from = std::is_base_of_v<Base, Derived>
+                     and std::is_convertible_v<const volatile Derived*,
+                                               const volatile Base*>;
 
 
-// concept convertible_to
+// X concept convertible_to
 template <class From, class To>
   concept convertible_to = true;
 
 
-// concept common_reference_with
+// X concept common_reference_with
 template <class T, class U>
   concept common_reference_with = true;
 
 
-// concept common_with
+// X concept common_with
 template <class T, class U>
   concept common_with = true;
 
@@ -56,42 +66,42 @@ template <class T>
   concept floating_point = std::is_floating_point_v<T>;
 
 
-// concept assignable_from
+// X concept assignable_from
 template <class LHS, class RHS>
   concept assignable_from = true;
 
 
-// concept swappable
+// X concept swappable
 template <class T>
   concept swappable = true;
 
 
-// concept swappable_with
+// X concept swappable_with
 template <class T, class U>
   concept swappable_with = true;
 
 
-// concept destructable
+// X concept destructable
 template <class T>
   concept destructable = true;
 
 
-// concept constructable_from
+// X concept constructable_from
 template <class T, class... Args>
   concept constructable_from = true;
 
 
-// concept default_initializable
+// X concept default_initializable
 template <class T>
   concept default_initializable = true;
 
 
-// concept move_constructable
+// X concept move_constructable
 template <class T>
   concept move_constructable = true;
 
 
-// concept copy_constructable
+// X concept copy_constructable
 template <class T>
   concept copy_constructable = true;
 
@@ -99,22 +109,22 @@ template <class T>
 //
 // Ccomparison concepts
 
-// concept equality_comparable
+// X concept equality_comparable
 template <class T>
   concept equality_comparable = true;
 
 
-// concept equality_comparable_with
+// X concept equality_comparable_with
 template <class T, class U>
   concept equality_comparable_with = true;
 
 
-// concept totally_ordered
+// X concept totally_ordered
 template <class T>
   concept totally_ordered = true;
 
 
-// totally_ordered_with
+// X totally_ordered_with
 template <class T, class U>
   concept totally_ordered_with = true;
 
@@ -122,55 +132,64 @@ template <class T, class U>
 //
 // Object concepts
 
-// concept movable
+// X concept movable
 template <class T>
   concept movable = true;
 
 
-// concept copyable
+// X concept copyable
 template <class T>
   concept copyable = true;
 
 
-// concept semiregular
+// X concept semiregular
 template <class T>
   concept semiregular = true;
 
 
-// concept regular
+// X concept regular
 template <class T>
   concept regular = true;
 
 
 //
 // Callable concepts
+/*
+namespace detail
+{
+  template <class T>
+    concept boolean_testable_impl = ...
+}
+*/
 
 // concept invokable
 template <class F, class... Args>
-  concept invokable = true;
+  concept invocable = requires(F&& f, Args&&... args) {
+    std::invoke(std::forward<F>(f), std::forward<Args>(args)...);
+  };
 
 
 // concept regular_invokable
 template <class F, class... Args>
-  concept regular_invokable = true;
+  concept regular_invocable = cmb::invocable<F, Args...>;
 
 
-// concept predicate
+// X concept predicate
 template <class F, class... Args>
   concept predicate = true;
 
 
-// concept relation
+// X concept relation
 template <class R, class T, class U>
   concept relation = true;
 
 
-// concept equivalence_relation
+// X concept equivalence_relation
 template <class R, class T, class U>
   concept equivalence_relation = true;
 
 
-// concept strict_weak_order
+// X concept strict_weak_order
 template <class R, class T, class U>
   concept strict_weak_order = true;
 
