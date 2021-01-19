@@ -11,7 +11,6 @@ namespace cmb {
 //
 // Declarations
 
-
 //
 // General language concepts
 
@@ -52,7 +51,6 @@ template <class LHS, class RHS>
 // concept swappable
 template <class T>
   concept swappable;
-
 template <class T, class U>
   concept swappable_with;
 
@@ -76,7 +74,6 @@ template <class T>
 template <class T>
   concept copy_constructable;
 
-
 //
 // Comparison concepts
 
@@ -92,9 +89,9 @@ template <class T>
 template <class T, class U>
   concept totally_ordered_with;
 
-
 //
 // Object concepts
+
 template <class T>
   concept movable;
 template <class T>
@@ -103,7 +100,6 @@ template <class T>
   concept semiregular;
 template <class T>
   concept regular;
-
 
 //
 // Callable concepts
@@ -131,6 +127,7 @@ template <class R, class T, class U>
 // concept strict_weak_order
 template <class R, class T, class U>
   concept strict_weak_order;
+
 
 
 //
