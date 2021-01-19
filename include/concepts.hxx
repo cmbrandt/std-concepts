@@ -9,8 +9,7 @@
 namespace cmb {
 
 //
-// Language-related concepts
-
+// General language concepts
 
 // concept same_as
 template <class T, class U>
@@ -103,7 +102,7 @@ concept totally_ordered_with = void;
 // Object concepts
 
 template <class T>
-concept movalbe = void;
+concept movable = void;
 
 template <class T>
 concept copyable = void;
