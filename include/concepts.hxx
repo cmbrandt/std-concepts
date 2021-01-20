@@ -95,7 +95,6 @@ template <class LHS, class RHS>
     };
 
 
-
 // X concept swappable
 template <class T>
   concept swappable = true;
@@ -106,25 +105,30 @@ template <class T, class U>
   concept swappable_with = true;
 
 
-// XXXX concept destructable
+// concept destructable
 template <class T>
   concept destructable = std::is_nothrow_destructible_v<T>;
 
 
-// XXXX concept constructable_from
+// concept constructable_from
 template <class T, class... Args>
   concept constructable_from = cmb::destructable<T> and
                                std::is_constructible_v<T, Args...>;
 
 
-// XXXX concept default_initializable
+// concept default_initializable
 template <class T>
-  concept default_initializable = true;
+  concept default_initializable = cmb::constructable_from<T> and
+    requires {
+      T{ };
+      (void) ::new T;
+    };
 
 
-// XXXX concept move_constructable
+// concept move_constructable
 template <class T>
-  concept move_constructable = true;
+  concept move_constructable = cmb::constructable_from<T, T> and
+                               cmb::convertible_to<T, T>;
 
 
 // XXXX concept copy_constructable
