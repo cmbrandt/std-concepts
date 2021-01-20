@@ -20,30 +20,48 @@ namespace detail
     concept same_as_impl = std::is_same_v<T, U>;
 }
 template <class T, class U>
-  concept same_as = cmb::detail::same_as_impl<T, U>
-                and cmb::detail::same_as_impl<U, T>;
+  concept same_as = cmb::detail::same_as_impl<T, U> and
+                    cmb::detail::same_as_impl<U, T>;
 
 
 // concept derived_from
 template <class Derived, class Base>
-  concept derived_from = std::is_base_of_v<Base, Derived>
-                     and std::is_convertible_v<const volatile Derived*,
-                                               const volatile Base*>;
+  concept derived_from = std::is_base_of_v<Base, Derived> and
+    std::is_convertible_v<const volatile Derived*, const volatile Base*>;
 
 
-// X concept convertible_to
+// XXXX concept convertible_to
 template <class From, class To>
-  concept convertible_to = true;
+  concept convertible_to = std::is_convertible_v<From, To> and
+    requires(std::add_rvalue_reference_t<From>(&f)()) {
+      static_cast<To>(f());
+    };
 
 
-// X concept common_reference_with
+// XXXX concept common_reference_with
 template <class T, class U>
-  concept common_reference_with = true;
+  concept common_reference_with =
+    cmb::same_as<std::common_reference_t<T, U>, std::common_reference_t<U, T>> and
+    cmb::convertible_to<T, std::common_reference_t<T, U>> and
+    cmb::convertible_to<U, std::common_reference_t<T, U>>;
 
 
-// X concept common_with
+// XXXX concept common_with
 template <class T, class U>
-  concept common_with = true;
+  concept common_with =
+    cmb::same_as<std::common_type_t<T, U>, std::common_type_t<U, T>> and
+    requires {
+      static_cast<std::common_type_t<T, U>>(std::declval<T>());
+      static_cast<std::common_type_t<T, U>>(std::declval<U>());
+    } and
+    cmb::common_reference_with<
+      std::add_lvalue_reference<T const>,
+      std::add_lvalue_reference<T const>> and
+    cmb::common_reference_with<
+      std::add_lvalue_reference_t<std::common_type_t<T, U>>,
+      std::common_reference_t<
+        std::add_lvalue_reference_t<T const>,
+        std::add_lvalue_reference_t<U const>>>;
 
 
 // concept common_with
@@ -66,7 +84,7 @@ template <class T>
   concept floating_point = std::is_floating_point_v<T>;
 
 
-// X concept assignable_from
+// XXXX concept assignable_from
 template <class LHS, class RHS>
   concept assignable_from = true;
 
@@ -81,27 +99,27 @@ template <class T, class U>
   concept swappable_with = true;
 
 
-// X concept destructable
+// XXXX concept destructable
 template <class T>
   concept destructable = true;
 
 
-// X concept constructable_from
+// XXXX concept constructable_from
 template <class T, class... Args>
   concept constructable_from = true;
 
 
-// X concept default_initializable
+// XXXX concept default_initializable
 template <class T>
   concept default_initializable = true;
 
 
-// X concept move_constructable
+// XXXX concept move_constructable
 template <class T>
   concept move_constructable = true;
 
 
-// X concept copy_constructable
+// XXXX concept copy_constructable
 template <class T>
   concept copy_constructable = true;
 
