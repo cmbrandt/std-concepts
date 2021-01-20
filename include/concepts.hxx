@@ -95,12 +95,12 @@ template <class LHS, class RHS>
     };
 
 
-// X concept swappable
+// XXXX concept swappable
 template <class T>
   concept swappable = true;
 
 
-// X concept swappable_with
+// XXXX concept swappable_with
 template <class T, class U>
   concept swappable_with = true;
 
@@ -131,7 +131,7 @@ template <class T>
                                cmb::convertible_to<T, T>;
 
 
-// XXXX concept copy_constructable
+// concept copy_constructable
 template <class T>
   concept copy_constructible = cmb::move_constructible<T> and
     cmb::constructible_from<T, T&>       and cmb::convertible_to<T&, T> and
