@@ -107,18 +107,18 @@ template <class T, class U>
 
 // concept destructable
 template <class T>
-  concept destructable = std::is_nothrow_destructible_v<T>;
+  concept destructible = std::is_nothrow_destructible_v<T>;
 
 
 // concept constructable_from
 template <class T, class... Args>
-  concept constructable_from = cmb::destructable<T> and
+  concept constructible_from = cmb::destructible<T> and
                                std::is_constructible_v<T, Args...>;
 
 
 // concept default_initializable
 template <class T>
-  concept default_initializable = cmb::constructable_from<T> and
+  concept default_initializable = cmb::constructible_from<T> and
     requires {
       T{ };
       (void) ::new T;
@@ -127,13 +127,16 @@ template <class T>
 
 // concept move_constructable
 template <class T>
-  concept move_constructable = cmb::constructable_from<T, T> and
+  concept move_constructible = cmb::constructible_from<T, T> and
                                cmb::convertible_to<T, T>;
 
 
 // XXXX concept copy_constructable
 template <class T>
-  concept copy_constructable = true;
+  concept copy_constructible = cmb::move_constructible<T> and
+    cmb::constructible_from<T, T&>       and cmb::convertible_to<T&, T> and
+    cmb::constructible_from<T, T const&> and cmb::convertible_to<T const&, T> and
+    cmb::constructible_from<T, T const>  and cmb::convertible_to<T const,  T>;
 
 
 //
