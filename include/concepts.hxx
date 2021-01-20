@@ -30,7 +30,7 @@ template <class Derived, class Base>
     std::is_convertible_v<const volatile Derived*, const volatile Base*>;
 
 
-// XXXX concept convertible_to
+// concept convertible_to
 template <class From, class To>
   concept convertible_to = std::is_convertible_v<From, To> and
     requires(std::add_rvalue_reference_t<From>(&f)()) {
@@ -38,7 +38,7 @@ template <class From, class To>
     };
 
 
-// XXXX concept common_reference_with
+// concept common_reference_with
 template <class T, class U>
   concept common_reference_with =
     cmb::same_as<std::common_reference_t<T, U>, std::common_reference_t<U, T>> and
@@ -46,7 +46,7 @@ template <class T, class U>
     cmb::convertible_to<U, std::common_reference_t<T, U>>;
 
 
-// XXXX concept common_with
+// concept common_with
 template <class T, class U>
   concept common_with =
     cmb::same_as<std::common_type_t<T, U>, std::common_type_t<U, T>> and
@@ -86,7 +86,14 @@ template <class T>
 
 // XXXX concept assignable_from
 template <class LHS, class RHS>
-  concept assignable_from = true;
+  concept assignable_from = std::is_lvalue_reference_v<LHS> and
+    cmb::common_reference_with<
+      std::remove_reference_t<LHS> const&,
+      std::remove_reference_t<RHS> const&> and
+    requires(LHS lhs, RHS&& rhs) {
+      { lhs = std::forward<RHS>(rhs) } -> cmb::same_as<LHS>;
+    };
+
 
 
 // X concept swappable
@@ -101,12 +108,13 @@ template <class T, class U>
 
 // XXXX concept destructable
 template <class T>
-  concept destructable = true;
+  concept destructable = std::is_nothrow_destructible_v<T>;
 
 
 // XXXX concept constructable_from
 template <class T, class... Args>
-  concept constructable_from = true;
+  concept constructable_from = cmb::destructable<T> and
+                               std::is_constructible_v<T, Args...>;
 
 
 // XXXX concept default_initializable
