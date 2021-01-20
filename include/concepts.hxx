@@ -20,19 +20,21 @@ namespace detail
     concept same_as_impl = std::is_same_v<T, U>;
 }
 template <class T, class U>
-  concept same_as = cmb::detail::same_as_impl<T, U> and
-                    cmb::detail::same_as_impl<U, T>;
+  concept same_as =
+    cmb::detail::same_as_impl<T, U> and cmb::detail::same_as_impl<U, T>;
 
 
 // concept derived_from
 template <class Derived, class Base>
-  concept derived_from = std::is_base_of_v<Base, Derived> and
+  concept derived_from =
+    std::is_base_of_v<Base, Derived> and
     std::is_convertible_v<const volatile Derived*, const volatile Base*>;
 
 
 // concept convertible_to
 template <class From, class To>
-  concept convertible_to = std::is_convertible_v<From, To> and
+  concept convertible_to =
+    std::is_convertible_v<From, To> and
     requires(std::add_rvalue_reference_t<From>(&f)()) {
       static_cast<To>(f());
     };
@@ -55,8 +57,8 @@ template <class T, class U>
       static_cast<std::common_type_t<T, U>>(std::declval<U>());
     } and
     cmb::common_reference_with<
-      std::add_lvalue_reference<T const>,
-      std::add_lvalue_reference<T const>> and
+      std::add_lvalue_reference_t<T const>,
+      std::add_lvalue_reference_t<T const>> and
     cmb::common_reference_with<
       std::add_lvalue_reference_t<std::common_type_t<T, U>>,
       std::common_reference_t<
@@ -84,9 +86,10 @@ template <class T>
   concept floating_point = std::is_floating_point_v<T>;
 
 
-// XXXX concept assignable_from
+// concept assignable_from
 template <class LHS, class RHS>
-  concept assignable_from = std::is_lvalue_reference_v<LHS> and
+  concept assignable_from =
+    std::is_lvalue_reference_v<LHS> and
     cmb::common_reference_with<
       std::remove_reference_t<LHS> const&,
       std::remove_reference_t<RHS> const&> and
@@ -112,13 +115,14 @@ template <class T>
 
 // concept constructable_from
 template <class T, class... Args>
-  concept constructible_from = cmb::destructible<T> and
-                               std::is_constructible_v<T, Args...>;
+  concept constructible_from =
+    cmb::destructible<T> and std::is_constructible_v<T, Args...>;
 
 
 // concept default_initializable
 template <class T>
-  concept default_initializable = cmb::constructible_from<T> and
+  concept default_initializable =
+    cmb::constructible_from<T> and
     requires {
       T{ };
       (void) ::new T;
@@ -127,13 +131,14 @@ template <class T>
 
 // concept move_constructable
 template <class T>
-  concept move_constructible = cmb::constructible_from<T, T> and
-                               cmb::convertible_to<T, T>;
+  concept move_constructible =
+    cmb::constructible_from<T, T> and cmb::convertible_to<T, T>;
 
 
 // concept copy_constructable
 template <class T>
-  concept copy_constructible = cmb::move_constructible<T> and
+  concept copy_constructible =
+    cmb::move_constructible<T> and
     cmb::constructible_from<T, T&>       and cmb::convertible_to<T&, T> and
     cmb::constructible_from<T, T const&> and cmb::convertible_to<T const&, T> and
     cmb::constructible_from<T, T const>  and cmb::convertible_to<T const,  T>;
@@ -197,8 +202,9 @@ namespace detail
 
 // concept invokable
 template <class F, class... Args>
-  concept invocable = requires(F&& f, Args&&... args) {
-    std::invoke(std::forward<F>(f), std::forward<Args>(args)...);
+  concept invocable =
+    requires(F&& f, Args&&... args) {
+      std::invoke(std::forward<F>(f), std::forward<Args>(args)...);
   };
 
 
