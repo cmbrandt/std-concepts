@@ -153,10 +153,13 @@ template <class T>
 // concept copy_constructable
 template <class T>
   concept copy_constructible =
-    cmb::move_constructible<T> and
-    cmb::constructible_from<T, T&>       and cmb::convertible_to<T&, T>       and
-    cmb::constructible_from<T, T const&> and cmb::convertible_to<T const&, T> and
-    cmb::constructible_from<T, T const>  and cmb::convertible_to<T const,  T>;
+    cmb::move_constructible<T>           and
+    cmb::constructible_from<T, T&>       and
+    cmb::constructible_from<T, T const>  and
+    cmb::constructible_from<T, T const&> and
+    cmb::convertible_to<T&,       T>     and
+    cmb::convertible_to<T const,  T>     and
+    cmb::convertible_to<T const&, T>;
 
 
 //
