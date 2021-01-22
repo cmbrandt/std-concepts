@@ -4,6 +4,7 @@
 #define CONCEPTS_HXX
 
 #include <functional>
+//#include <ranges>
 #include <type_traits>
 #include <utility>
 
@@ -100,8 +101,7 @@ template <class LHS, class RHS>
 
 // concept swappable
 template <class T>
-  concept swappable =
-    requires(T& a, T& b) { ranges::swap(a, b); };
+  concept swappable = requires(T& a, T& b) { std::ranges::swap(a, b); };
 
 
 // concept swappable_with
@@ -109,11 +109,11 @@ template <class T, class U>
   concept swappable_with =
     cmb::common_reference_with<T, T> and
     requires(T&& t, U&& u) {
-      ranges::swap(static_cast<T&&>(t), static_cast<T&&>(t));
-      ranges::swap(static_cast<U&&>(u), static_cast<U&&>(u));
-      ranges::swap(static_cast<T&&>(t), static_cast<U&&>(u));
-      ranges::swap(static_cast<U&&>(u), static_cast<T&&>(t));
-    }
+      std::ranges::swap(static_cast<T&&>(t), static_cast<T&&>(t));
+      std::ranges::swap(static_cast<U&&>(u), static_cast<U&&>(u));
+      std::ranges::swap(static_cast<T&&>(t), static_cast<U&&>(u));
+      std::ranges::swap(static_cast<U&&>(u), static_cast<T&&>(t));
+    };
 
 
 // concept destructable
