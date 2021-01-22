@@ -202,7 +202,7 @@ template <class T, class U>
     cmb::detail::weakly_equality_comparable_with<T, U>;
 
 
-// X concept totally_ordered
+// concept totally_ordered
 namespace detail
 {
   template <class T, class U>
@@ -224,10 +224,11 @@ template <class T>
     cmb::equality_comparable<T> and cmb::detail::partially_ordered_with<T, T>;
 
 
-// X totally_ordered_with
+// totally_ordered_with
 template <class T, class U>
   concept totally_ordered_with =
-    cmb::totally_ordered<T> and cmb::totally_ordered<U> and
+    cmb::totally_ordered<T> and
+    cmb::totally_ordered<U> and
     cmb::equality_comparable_with<T, U> and
     cmb::totally_ordered<
       std::common_reference_t<
@@ -286,24 +287,28 @@ template <class F, class... Args>
   concept regular_invocable = cmb::invocable<F, Args...>;
 
 
-// X concept predicate
+// concept predicate
 template <class F, class... Args>
-  concept predicate = true;
+  concept predicate =
+    cmb::regular_invocable<F, Args...> and
+    cmb::detail::boolean_testable<std::invoke_result_t<F, Args...>>;
 
 
-// X concept relation
+// concept relation
 template <class R, class T, class U>
-  concept relation = true;
+  concept relation =
+    cmb::predicate<R, T, T> and cmb::predicate<R, U, U> and
+    cmb::predicate<R, T, U> and cmb::predicate<R, U, T>;
 
 
 // X concept equivalence_relation
 template <class R, class T, class U>
-  concept equivalence_relation = true;
+  concept equivalence_relation = cmb::relation<R, T, U>;
 
 
 // X concept strict_weak_order
 template <class R, class T, class U>
-  concept strict_weak_order = true;
+  concept strict_weak_order = cmb::relation<R, T, U>;
 
 } // namespace cmb
 
