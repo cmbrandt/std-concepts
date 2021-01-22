@@ -4,7 +4,7 @@
 #define CONCEPTS_HXX
 
 #include <functional>
-//#include <ranges>
+#include <ranges>
 #include <type_traits>
 #include <utility>
 
@@ -180,22 +180,26 @@ template <class T, class U>
 
 // X concept movable
 template <class T>
-  concept movable = true;
+  concept movable =
+    std::is_object_v<T> and cmb::move_constructible<T> and
+    cmb::assignable_from<T&, T> and cmb::swappable<T>;
 
 
 // X concept copyable
 template <class T>
-  concept copyable = true;
+  concept copyable =
+    cmb::copy_constructible<T> and cmb::move_constructible<T> and
+    cmb::assignable_from<T&, T> and cmb::swappable<T>;
 
 
 // X concept semiregular
 template <class T>
-  concept semiregular = true;
+  concept semiregular = cmb::copyable<T> and cmb::default_initializable<T>;
 
 
 // X concept regular
 template <class T>
-  concept regular = true;
+  concept regular = cmb::semiregular<T> and cmb::equality_comparable<T>;
 
 
 //
