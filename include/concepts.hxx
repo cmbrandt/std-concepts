@@ -45,7 +45,9 @@ template <class From, class To>
 // concept common_reference_with
 template <class T, class U>
   concept common_reference_with =
-    cmb::same_as<std::common_reference_t<T, U>, std::common_reference_t<U, T>> and
+    cmb::same_as<
+      std::common_reference_t<T, U>,
+      std::common_reference_t<U, T>> and
     cmb::convertible_to<T, std::common_reference_t<T, U>> and
     cmb::convertible_to<U, std::common_reference_t<T, U>>;
 
@@ -53,7 +55,9 @@ template <class T, class U>
 // concept common_with
 template <class T, class U>
   concept common_with =
-    cmb::same_as<std::common_type_t<T, U>, std::common_type_t<U, T>> and
+    cmb::same_as<
+      std::common_type_t<T, U>,
+      std::common_type_t<U, T>> and
     requires {
       static_cast<std::common_type_t<T, U>>(std::declval<T>());
       static_cast<std::common_type_t<T, U>>(std::declval<U>());
@@ -153,12 +157,12 @@ template <class T>
 // concept copy_constructable
 template <class T>
   concept copy_constructible =
-    cmb::move_constructible<T>           and
-    cmb::constructible_from<T, T&>       and
-    cmb::constructible_from<T, T const>  and
+    cmb::move_constructible<T> and
+    cmb::constructible_from<T, T&> and
+    cmb::constructible_from<T, T const> and
     cmb::constructible_from<T, T const&> and
-    cmb::convertible_to<T&,       T>     and
-    cmb::convertible_to<T const,  T>     and
+    cmb::convertible_to<T&,       T> and
+    cmb::convertible_to<T const,  T> and
     cmb::convertible_to<T const&, T>;
 
 
@@ -254,8 +258,8 @@ template <class T, class U>
 // concept movable
 template <class T>
   concept movable =
-    std::is_object_v<T>         and
-    cmb::move_constructible<T>  and
+    std::is_object_v<T> and
+    cmb::move_constructible<T> and
     cmb::assignable_from<T&, T> and
     cmb::swappable<T>;
 
@@ -263,8 +267,8 @@ template <class T>
 // concept copyable
 template <class T>
   concept copyable =
-    cmb::copy_constructible<T>  and
-    cmb::move_constructible<T>  and
+    cmb::copy_constructible<T> and
+    cmb::move_constructible<T> and
     cmb::assignable_from<T&, T> and
     cmb::swappable<T>;
 
