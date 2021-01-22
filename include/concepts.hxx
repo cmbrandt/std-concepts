@@ -98,14 +98,22 @@ template <class LHS, class RHS>
     };
 
 
-// XXXX concept swappable
+// concept swappable
 template <class T>
-  concept swappable = true;
+  concept swappable =
+    requires(T& a, T& b) { ranges::swap(a, b); };
 
 
-// XXXX concept swappable_with
+// concept swappable_with
 template <class T, class U>
-  concept swappable_with = true;
+  concept swappable_with =
+    cmb::common_reference_with<T, T> and
+    requires(T&& t, U&& u) {
+      ranges::swap(static_cast<T&&>(t), static_cast<T&&>(t));
+      ranges::swap(static_cast<U&&>(u), static_cast<U&&>(u));
+      ranges::swap(static_cast<T&&>(t), static_cast<U&&>(u));
+      ranges::swap(static_cast<U&&>(u), static_cast<T&&>(t));
+    }
 
 
 // concept destructable
