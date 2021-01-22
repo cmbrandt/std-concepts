@@ -147,7 +147,7 @@ template <class T>
 template <class T>
   concept copy_constructible =
     cmb::move_constructible<T> and
-    cmb::constructible_from<T, T&>       and cmb::convertible_to<T&, T> and
+    cmb::constructible_from<T, T&>       and cmb::convertible_to<T&, T>       and
     cmb::constructible_from<T, T const&> and cmb::convertible_to<T const&, T> and
     cmb::constructible_from<T, T const>  and cmb::convertible_to<T const,  T>;
 
@@ -155,7 +155,7 @@ template <class T>
 //
 // Ccomparison concepts
 
-// X concept equality_comparable
+// Helper concepts
 namespace detail
 {
   template <class T>
@@ -168,6 +168,8 @@ namespace detail
         { !static_cast<T&&>(t) } -> cmb::detail::boolean_testable_impl;
       };
 }
+
+// concept equality_comparable
 namespace detail
 {
   template <class T, class U>
@@ -185,19 +187,53 @@ template <class T>
     cmb::detail::weakly_equality_comparable_with<T, T>;
 
 
-// X concept equality_comparable_with
+// concept equality_comparable_with
 template <class T, class U>
-  concept equality_comparable_with = true;
+  concept equality_comparable_with =
+    cmb::equality_comparable<T> and
+    cmb::equality_comparable<U> and
+    cmb::common_reference_with<
+      std::remove_reference_t<T> const&,
+      std::remove_reference_t<U> const&> and
+    cmb::equality_comparable<
+      std::common_reference_t<
+        std::remove_reference_t<T> const&,
+        std::remove_reference_t<U> const&>> and
+    cmb::detail::weakly_equality_comparable_with<T, U>;
 
 
 // X concept totally_ordered
+namespace detail
+{
+  template <class T, class U>
+    concept partially_ordered_with =
+      requires(std::remove_reference_t<T> const& t,
+               std::remove_reference_t<U> const& u) {
+        { t <  u } -> cmb::detail::boolean_testable;
+        { t >  u } -> cmb::detail::boolean_testable;
+        { t <= u } -> cmb::detail::boolean_testable;
+        { t >= u } -> cmb::detail::boolean_testable;
+        { u <  t } -> cmb::detail::boolean_testable;
+        { u >  t } -> cmb::detail::boolean_testable;
+        { u <= t } -> cmb::detail::boolean_testable;
+        { u >= t } -> cmb::detail::boolean_testable;
+      };
+}
 template <class T>
-  concept totally_ordered = true;
+  concept totally_ordered =
+    cmb::equality_comparable<T> and cmb::detail::partially_ordered_with<T, T>;
 
 
 // X totally_ordered_with
 template <class T, class U>
-  concept totally_ordered_with = true;
+  concept totally_ordered_with =
+    cmb::totally_ordered<T> and cmb::totally_ordered<U> and
+    cmb::equality_comparable_with<T, U> and
+    cmb::totally_ordered<
+      std::common_reference_t<
+        std::remove_reference_t<T> const&,
+        std::remove_reference_t<U> const&>> and
+    cmb::detail::partially_ordered_with<T, U>;
 
 
 //
