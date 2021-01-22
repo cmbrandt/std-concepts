@@ -156,8 +156,33 @@ template <class T>
 // Ccomparison concepts
 
 // X concept equality_comparable
+namespace detail
+{
+  template <class T>
+    concept boolean_testable_impl = cmb::convertible_to<T, bool>;
+
+  template <class T>
+    concept boolean_testable =
+      cmb::detail::boolean_testable_impl<T> and
+      requires(T&& t) {
+        { !static_cast<T&&>(t) } -> cmb::detail::boolean_testable_impl;
+      };
+}
+namespace detail
+{
+  template <class T, class U>
+    concept weakly_equality_comparable_with =
+      requires(std::remove_reference_t<T> const& t,
+               std::remove_reference_t<U> const& u) {
+        { t == u } -> cmb::detail::boolean_testable;
+        { t != u } -> cmb::detail::boolean_testable;
+        { u == t } -> cmb::detail::boolean_testable;
+        { u != t } -> cmb::detail::boolean_testable;
+      };
+}
 template <class T>
-  concept equality_comparable = true;
+  concept equality_comparable =
+    cmb::detail::weakly_equality_comparable_with<T, T>;
 
 
 // X concept equality_comparable_with
@@ -178,26 +203,26 @@ template <class T, class U>
 //
 // Object concepts
 
-// X concept movable
+// concept movable
 template <class T>
   concept movable =
     std::is_object_v<T> and cmb::move_constructible<T> and
     cmb::assignable_from<T&, T> and cmb::swappable<T>;
 
 
-// X concept copyable
+// concept copyable
 template <class T>
   concept copyable =
-    cmb::copy_constructible<T> and cmb::move_constructible<T> and
+    cmb::copy_constructible<T>  and cmb::move_constructible<T> and
     cmb::assignable_from<T&, T> and cmb::swappable<T>;
 
 
-// X concept semiregular
+// concept semiregular
 template <class T>
   concept semiregular = cmb::copyable<T> and cmb::default_initializable<T>;
 
 
-// X concept regular
+// concept regular
 template <class T>
   concept regular = cmb::semiregular<T> and cmb::equality_comparable<T>;
 
