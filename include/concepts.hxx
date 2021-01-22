@@ -22,7 +22,8 @@ namespace detail
 }
 template <class T, class U>
   concept same_as =
-    cmb::detail::same_as_impl<T, U> and cmb::detail::same_as_impl<U, T>;
+    cmb::detail::same_as_impl<T, U> and
+    cmb::detail::same_as_impl<U, T>;
 
 
 // concept derived_from
@@ -74,12 +75,16 @@ template <class T>
 
 // concept signed_integral
 template <class T>
-  concept signed_integral = std::is_integral_v<T> and std::is_signed_v<T>;
+  concept signed_integral =
+    std::is_integral_v<T> and
+    std::is_signed_v<T>;
 
 
 // concept unsigned_integral
 template <class T>
-  concept unsigned_integral = std::is_integral_v<T> and !std::is_signed_v<T>;
+  concept unsigned_integral =
+    std::is_integral_v<T> and
+    !std::is_signed_v<T>;
 
 
 // concept floating_point
@@ -124,7 +129,8 @@ template <class T>
 // concept constructable_from
 template <class T, class... Args>
   concept constructible_from =
-    cmb::destructible<T> and std::is_constructible_v<T, Args...>;
+    cmb::destructible<T> and
+    std::is_constructible_v<T, Args...>;
 
 
 // concept default_initializable
@@ -140,7 +146,8 @@ template <class T>
 // concept move_constructable
 template <class T>
   concept move_constructible =
-    cmb::constructible_from<T, T> and cmb::convertible_to<T, T>;
+    cmb::constructible_from<T, T> and
+    cmb::convertible_to<T, T>;
 
 
 // concept copy_constructable
@@ -221,7 +228,8 @@ namespace detail
 }
 template <class T>
   concept totally_ordered =
-    cmb::equality_comparable<T> and cmb::detail::partially_ordered_with<T, T>;
+    cmb::equality_comparable<T> and
+    cmb::detail::partially_ordered_with<T, T>;
 
 
 // totally_ordered_with
@@ -243,36 +251,37 @@ template <class T, class U>
 // concept movable
 template <class T>
   concept movable =
-    std::is_object_v<T> and cmb::move_constructible<T> and
-    cmb::assignable_from<T&, T> and cmb::swappable<T>;
+    std::is_object_v<T>         and
+    cmb::move_constructible<T>  and
+    cmb::assignable_from<T&, T> and
+    cmb::swappable<T>;
 
 
 // concept copyable
 template <class T>
   concept copyable =
-    cmb::copy_constructible<T>  and cmb::move_constructible<T> and
-    cmb::assignable_from<T&, T> and cmb::swappable<T>;
+    cmb::copy_constructible<T>  and
+    cmb::move_constructible<T>  and
+    cmb::assignable_from<T&, T> and
+    cmb::swappable<T>;
 
 
 // concept semiregular
 template <class T>
-  concept semiregular = cmb::copyable<T> and cmb::default_initializable<T>;
+  concept semiregular =
+    cmb::copyable<T> and
+    cmb::default_initializable<T>;
 
 
 // concept regular
 template <class T>
-  concept regular = cmb::semiregular<T> and cmb::equality_comparable<T>;
+  concept regular =
+    cmb::semiregular<T> and
+    cmb::equality_comparable<T>;
 
 
 //
 // Callable concepts
-/*
-namespace detail
-{
-  template <class T>
-    concept boolean_testable_impl = ...
-}
-*/
 
 // concept invokable
 template <class F, class... Args>
@@ -297,8 +306,10 @@ template <class F, class... Args>
 // concept relation
 template <class R, class T, class U>
   concept relation =
-    cmb::predicate<R, T, T> and cmb::predicate<R, U, U> and
-    cmb::predicate<R, T, U> and cmb::predicate<R, U, T>;
+    cmb::predicate<R, T, T> and
+    cmb::predicate<R, U, U> and
+    cmb::predicate<R, T, U> and
+    cmb::predicate<R, U, T>;
 
 
 // X concept equivalence_relation
