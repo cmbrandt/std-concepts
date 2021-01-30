@@ -55,11 +55,11 @@
 
 #### Indirect callable requirements
 * indirectly_unary_invocable
-* concept indirectly_regular_unary_invocable
-* concept indirect_unary_predicate
-* concept indirect_binary_predicate
-* concept indirect_equivalence_relation
-* concept indirect_strict_weak_order
+* indirectly_regular_unary_invocable
+* indirect_unary_predicate
+* indirect_binary_predicate
+* indirect_equivalence_relation
+* indirect_strict_weak_order
 
 #### Common algorithm requirements
 * indirectly_movable
