@@ -160,8 +160,8 @@ template <class T>
 template <class T>
   concept copy_constructible =
     cmb::move_constructible<T> and
-    cmb::constructible_from<T, T&> and
-    cmb::constructible_from<T, T const> and
+    cmb::constructible_from<T, T&      > and
+    cmb::constructible_from<T, T const > and
     cmb::constructible_from<T, T const&> and
     cmb::convertible_to<T&,       T> and
     cmb::convertible_to<T const,  T> and
@@ -294,7 +294,7 @@ template <class T>
 //
 // Callable concepts
 
-// concept invokable
+// concept invocable
 template <class F, class... Args>
   concept invocable =
     requires(F&& f, Args&&... args) {
@@ -302,7 +302,7 @@ template <class F, class... Args>
   };
 
 
-// concept regular_invokable
+// concept regular_invocable
 template <class F, class... Args>
   concept regular_invocable = cmb::invocable<F, Args...>;
 
