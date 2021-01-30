@@ -147,7 +147,6 @@ template <class T>
     cmb::constructible_from<T> and
     requires {
       T{ };
-      //(void) ::new T;
       ::new (static_cast<void*>(nullptr)) T;
     };
 
@@ -174,7 +173,7 @@ template <class T>
 //
 // Ccomparison concepts
 
-// Helper concepts
+// Helper concept boolean_testable
 namespace detail
 {
   template <class T>
@@ -184,7 +183,7 @@ namespace detail
     concept boolean_testable =
       cmb::detail::boolean_testable_impl<T> and
       requires(T&& t) {
-        { !static_cast<T&&>(t) } -> cmb::detail::boolean_testable_impl;
+        { not std::forward<T>(t) } -> cmb::detail::boolean_testable_impl;
       };
 }
 
