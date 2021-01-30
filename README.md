@@ -3,7 +3,38 @@
 
 ### `<concepts.hxx>`
 
-
+#### Language related concepts
+* same_as
+* derived_from
+* convertible_to
+* common_reference_with
+* common_with
+* signed_integral
+* unsigned_integral
+* floating_point
+* assignable_from
+* swappable
+* swappable_with
+* destructible
+* constructible_from
+* default_initializable
+* move_constructible
+* copy_constructible
+* equality_comparable
+* equality_comparable_with
+* totally_ordered
+* totally_ordered_with
+* movable
+* copyable
+* semiregular
+* regular
+* invocable
+* regular_invocable
+* predicate
+* relation
+* equivalence_relation
+* strict_weak_order
+* TODO
 
 ### `<iterator_concepts.hxx>`
 
