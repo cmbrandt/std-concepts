@@ -1,5 +1,3 @@
-// concepts.hxx
-
 #ifndef CONCEPTS_HXX
 #define CONCEPTS_HXX
 

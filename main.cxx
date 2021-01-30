@@ -6,5 +6,5 @@
 
 int main()
 {
-  std::cout << "\nDone." << std::endl;
+  std::cout << "\nCompiles without error." << std::endl;
 }
