@@ -31,6 +31,7 @@ template <class Derived, class Base>
   concept derived_from =
     std::is_base_of_v<Base, Derived> and
     std::is_convertible_v<const volatile Derived*, const volatile Base*>;
+    //std::is_convertible_v<Derived const* volatile, Base const* volatile>;
 
 
 // concept convertible_to
@@ -64,7 +65,7 @@ template <class T, class U>
     } and
     cmb::common_reference_with<
       std::add_lvalue_reference_t<T const>,
-      std::add_lvalue_reference_t<T const>> and
+      std::add_lvalue_reference_t<U const>> and
     cmb::common_reference_with<
       std::add_lvalue_reference_t<std::common_type_t<T, U>>,
       std::common_reference_t<
@@ -88,7 +89,7 @@ template <class T>
 template <class T>
   concept unsigned_integral =
     std::is_integral_v<T> and
-    !std::is_signed_v<T>;
+    not std::is_signed_v<T>;
 
 
 // concept floating_point
@@ -110,18 +111,21 @@ template <class LHS, class RHS>
 
 // concept swappable
 template <class T>
-  concept swappable = requires(T& a, T& b) { std::ranges::swap(a, b); };
+  concept swappable =
+    requires(T& a, T& b) {
+      std::ranges::swap(a, b);
+    };
 
 
 // concept swappable_with
 template <class T, class U>
   concept swappable_with =
-    cmb::common_reference_with<T, T> and
+    cmb::common_reference_with<T, U> and
     requires(T&& t, U&& u) {
-      std::ranges::swap(static_cast<T&&>(t), static_cast<T&&>(t));
-      std::ranges::swap(static_cast<U&&>(u), static_cast<U&&>(u));
-      std::ranges::swap(static_cast<T&&>(t), static_cast<U&&>(u));
-      std::ranges::swap(static_cast<U&&>(u), static_cast<T&&>(t));
+      std::ranges::swap(std::forward<T>(t), std::forward<T>(t));
+      std::ranges::swap(std::forward<T>(u), std::forward<T>(u));
+      std::ranges::swap(std::forward<T>(t), std::forward<T>(u));
+      std::ranges::swap(std::forward<T>(u), std::forward<T>(t));
     };
 
 
@@ -143,7 +147,8 @@ template <class T>
     cmb::constructible_from<T> and
     requires {
       T{ };
-      (void) ::new T;
+      //(void) ::new T;
+      ::new (static_cast<void*>(nullptr)) T;
     };
 
 
