@@ -171,9 +171,9 @@ template <class T>
 
 
 //
-// Ccomparison concepts
+// Comparison concepts
 
-// Helper concept boolean_testable
+// helper concept boolean_testable
 namespace detail
 {
   template <class T>
@@ -272,9 +272,11 @@ template <class T>
 template <class T>
   concept copyable =
     cmb::copy_constructible<T> and
-    cmb::move_constructible<T> and
-    cmb::assignable_from<T&, T> and
-    cmb::swappable<T>;
+    cmb::movable<T> and
+    cmb::assignable_from<T&, T&> and
+    cmb::assignable_from<T&, T const> and
+    cmb::assignable_from<T&, T const&>;
+
 
 
 // concept semiregular
@@ -323,12 +325,12 @@ template <class R, class T, class U>
     cmb::predicate<R, U, T>;
 
 
-// X concept equivalence_relation
+// concept equivalence_relation
 template <class R, class T, class U>
   concept equivalence_relation = cmb::relation<R, T, U>;
 
 
-// X concept strict_weak_order
+// concept strict_weak_order
 template <class R, class T, class U>
   concept strict_weak_order = cmb::relation<R, T, U>;
 
