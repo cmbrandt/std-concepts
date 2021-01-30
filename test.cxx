@@ -1,5 +1,3 @@
-// main.cxx
-
 #include <iostream>
 #include <concepts.hxx>
 #include <iterator_concepts.hxx>
