@@ -127,12 +127,12 @@ template <class T, class U>
     };
 
 
-// concept destructable
+// concept destructible
 template <class T>
   concept destructible = std::is_nothrow_destructible_v<T>;
 
 
-// concept constructable_from
+// concept constructible_from
 template <class T, class... Args>
   concept constructible_from =
     cmb::destructible<T> and
@@ -149,14 +149,14 @@ template <class T>
     };
 
 
-// concept move_constructable
+// concept move_constructible
 template <class T>
   concept move_constructible =
     cmb::constructible_from<T, T> and
     cmb::convertible_to<T, T>;
 
 
-// concept copy_constructable
+// concept copy_constructible
 template <class T>
   concept copy_constructible =
     cmb::move_constructible<T> and
