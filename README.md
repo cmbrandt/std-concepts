@@ -23,13 +23,17 @@
 * contiguous_iterator
 
 #### Indirect callable requirements
-
-
+* indirectly_unary_invocable
+* concept indirectly_regular_unary_invocable
+* concept indirect_unary_predicate
+* concept indirect_binary_predicate
+* concept indirect_equivalence_relation
+* concept indirect_strict_weak_order
 
 #### Common algorithm requirements
-* concept indirectly_movable
-* concept indirectly_copyable
-* concept indirectly_swappable
-* concept indirectly_comparable
-* concept mergeable
-* concept sortable
+* indirectly_movable
+* indirectly_copyable
+* indirectly_swappable
+* indirectly_comparable
+* mergeable
+* sortable
