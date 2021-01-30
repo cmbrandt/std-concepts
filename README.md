@@ -15,3 +15,9 @@
 
 
 #### Common algorithm requirements
+* concept indirectly_movable
+* concept indirectly_copyable
+* concept indirectly_swappable
+* concept indirectly_comparable
+* concept mergeable
+* concept sortable
