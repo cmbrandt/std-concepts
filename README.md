@@ -3,7 +3,7 @@ My implementation of the C++20 Concepts Library.  The following concepts are def
 
 ## concepts.hxx
 
-#### Language related concepts
+### Language related concepts
 * same_as
 * derived_from
 * convertible_to
@@ -38,7 +38,7 @@ My implementation of the C++20 Concepts Library.  The following concepts are def
 
 ## iterator_concepts.hxx
 
-#### Iterator concepts
+### Iterator concepts
 * indirectly_readable
 * indirectly_writable
 * weakly_incrementable
@@ -53,7 +53,7 @@ My implementation of the C++20 Concepts Library.  The following concepts are def
 * random_access_iterator
 * contiguous_iterator
 
-#### Indirect callable requirements
+### Indirect callable requirements
 * indirectly_unary_invocable
 * indirectly_regular_unary_invocable
 * indirect_unary_predicate
