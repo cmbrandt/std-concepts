@@ -1,5 +1,5 @@
 # C++20 Concepts Library
-My implementation of the C++20 Concepts Library.  The following concepts are defined in header files listed below.  Each header file has been tested with GCC 10.2 using the `-std=c++20` flag.
+My implementation of the C++20 Concepts Library.  The following concepts are defined in the respective header files listed below.  Each header file has been tested with GCC 10.2 using the `-std=c++20` flag.
 
 ### `<concepts.hxx>`
 
