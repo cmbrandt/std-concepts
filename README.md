@@ -1,7 +1,7 @@
 # C++20 Concepts Library
 My implementation of the C++20 Concepts Library.  The following concepts are defined in the respective header files listed below.  Each header file has been tested with GCC 10.2 using the `-std=c++20` flag.
 
-## <concepts.hxx>
+## concepts.hxx
 
 #### Language related concepts
 * same_as
@@ -36,7 +36,7 @@ My implementation of the C++20 Concepts Library.  The following concepts are def
 * strict_weak_order
 * TODO
 
-## <iterator_concepts.hxx>
+## iterator_concepts.hxx
 
 #### Iterator concepts
 * indirectly_readable
