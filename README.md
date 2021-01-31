@@ -61,7 +61,7 @@ My implementation of the C++20 Concepts Library.  The following concepts are def
 * indirect_equivalence_relation
 * indirect_strict_weak_order
 
-#### Common algorithm requirements
+### Common algorithm requirements
 * indirectly_movable
 * indirectly_copyable
 * indirectly_swappable
