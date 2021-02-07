@@ -18,6 +18,7 @@ namespace detail
   template <class T, class U>
     concept same_as_impl = std::is_same_v<T, U>;
 }
+
 template <class T, class U>
   concept same_as =
     cmb::detail::same_as_impl<T, U> and
@@ -198,6 +199,7 @@ namespace detail
         { u != t } -> cmb::detail::boolean_testable;
       };
 }
+
 template <class T>
   concept equality_comparable =
     cmb::detail::weakly_equality_comparable_with<T, T>;
@@ -235,6 +237,7 @@ namespace detail
         { u >= t } -> cmb::detail::boolean_testable;
       };
 }
+
 template <class T>
   concept totally_ordered =
     cmb::equality_comparable<T> and
@@ -274,7 +277,6 @@ template <class T>
     cmb::assignable_from<T&, T&> and
     cmb::assignable_from<T&, T const> and
     cmb::assignable_from<T&, T const&>;
-
 
 
 // concept semiregular
