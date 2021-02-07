@@ -80,14 +80,14 @@ template <class T>
 // concept signed_integral
 template <class T>
   concept signed_integral =
-    std::is_integral_v<T> and
+    cmb::integral<T> and
     std::is_signed_v<T>;
 
 
 // concept unsigned_integral
 template <class T>
   concept unsigned_integral =
-    std::is_integral_v<T> and
+    cmb::integral<T> and
     not std::is_signed_v<T>;
 
 
