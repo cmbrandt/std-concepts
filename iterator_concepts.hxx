@@ -60,15 +60,33 @@ template <class I>
 
 
 // concept input_or_output_iterator
-
+template <class I>
+  concept input_or_output_iterator =
+    requires(I i) {
+      { *i } -> std::__detail::__can_reference; // using gcc intrinsic..
+    } and
+    std::weakly_incrementable<I>; // STD:: not CMB::
 
 
 // concept sentinel_for
-
+template <class S, class I>
+  concept sentinel_for =
+    cmb::semiregular<S> and
+    cmb::input_or_output_iterator<I> and
+    cmb::detail::weakly_equality_comparable_with<S, I>;
 
 
 // concept sized_sentinel_for
-
+template <class S, class I>
+  concept sized_sentinel_for =
+    cmb::sentinel_for<S, I> and
+    not std::disable_sized_sentinel_for<
+          std::remove_cv_t<S>,
+          std::remove_cv_t<I>> and
+    requires(I const& i, S const& s) {
+      { s - i } -> cmb::same_as<std::iter_difference_t<I>>;
+      { i - s } -> cmb::same_as<std::iter_difference_t<I>>;
+    };
 
 
 // concept input_iterator
