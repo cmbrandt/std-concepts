@@ -9,6 +9,7 @@ My implementation of the C++20 Concepts Library.  The following concepts are def
 * convertible_to
 * common_reference_with
 * common_with
+* integral
 * signed_integral
 * unsigned_integral
 * floating_point
@@ -34,7 +35,6 @@ My implementation of the C++20 Concepts Library.  The following concepts are def
 * relation
 * equivalence_relation
 * strict_weak_order
-* TODO
 
 ## iterator_concepts.hxx
 
