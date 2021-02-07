@@ -157,19 +157,48 @@ template <class I, class T>
 // Common algorithm requirements
 
 // concept indirectly_movable
+template <class In, class Out>
+  concept indirectly_movable =
+    cmb::indirectly_readable<In> and
+    cmb::indirectly_writable<Out, std::iter_rvalue_reference_t<In>>;
 
+
+// concept indirectly_moveable_storable
+template <class In, class Out>
+  concept indirectly_moveable_storable =
+    cmb::indirectly_movable<In, Out> and
+    cmb::indirectly_writable<Out, std::iter_value_t<In>> and
+    cmb::movable<std::iter_value_t<In>> and
+    cmb::constructible_from<std::iter_value_t<In>, std::iter_rvalue_reference_t<In>> and
+    cmb::assignable_from<std::iter_value_t<In>&, std::iter_rvalue_reference_t<In>>;
 
 
 // concept indirectly_copyable
+template <class In, class Out>
+  concept indirectly_copyable =
+    cmb::indirectly_readable<In> and
+    cmb::indirectly_writable<Out, std::iter_reference_t<In>>;
+
+
+// concept indirectly_copyable_storable
+template <class In, class Out>
+  concept indirectly_copyable_storable =
+    cmb::indirectly_copyable<In, Out> and
+    cmb::indirectly_writable<Out, std::iter_value_t<In>&> and
+    cmb::indirectly_writable<Out, std::iter_value_t<In> const&> and
+    cmb::indirectly_writable<Out, std::iter_value_t<In>&&> and
+    cmb::indirectly_writable<Out, std::iter_value_t<In> const&&> and
+    cmb::copyable<std::iter_value_t<In>> and
+    cmb::constructible_from<
+      std::iter_value_t<In>,
+      std::iter_reference_t<In>> and
+    cmb::assignable_from<std::iter_value_t<In>&, std::iter_reference_t<In>>;
 
 
 
 // concept indirectly_swappable
 
-
-
 // concept indirectly_comparable
-
 
 
 // concept mergeable
@@ -177,7 +206,10 @@ template <class I, class T>
 
 
 // concept sortable
-
+template <class I, class R = std::ranges::less, class P = std::identity>
+  concept sortable =
+    std::permutable<I> and
+    std::indirect_strict_weak_order<R, std::projected<I, P>>;
 
 
 
