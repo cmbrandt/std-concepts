@@ -155,11 +155,26 @@ template <class F, class I>
 
 
 // concept indirect_unary_predicate
-
+template<class F, class I>
+  concept indirect_unary_predicate =
+    cmb::indirectly_readable<I> and
+    cmb::copy_constructible<F> and
+    cmb::predicate<F&, std::iter_value_t<I>&> and
+    cmb::predicate<F&, std::iter_reference_t<I>> and
+    cmb::predicate<F&, std::iter_common_reference_t<I>>;
 
 
 // concept indirect_binary_predicate
-
+template<class F, class I1, class I2>
+  concept indirect_binary_predicate =
+    cmb::indirectly_readable<I1> and
+    cmb::indirectly_readable<I2> and
+    cmb::copy_constructible<F> and
+    cmb::predicate<F&, std::iter_value_t<I1>&, std::iter_value_t<I2>&> and
+    cmb::predicate<F&, std::iter_value_t<I1>&, std::iter_reference_t<I2>> and
+    cmb::predicate<F&, std::iter_reference_t<I1>, std::iter_value_t<I2>&> and
+    cmb::predicate<F&, std::iter_reference_t<I1>, std::iter_reference_t<I2>> and
+    cmb::predicate<F&, std::iter_common_reference_t<I1>, std::iter_common_reference_t<I2>>;
 
 
 // concept indirect_equivalence_relation
