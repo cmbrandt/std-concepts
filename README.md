@@ -63,8 +63,11 @@ My implementation of the C++20 Concepts Library.  The following concepts are def
 
 ### Common algorithm requirements
 * indirectly_movable
+* indirectly_movable_storable
 * indirectly_copyable
+* indirectly_copyable_storable
 * indirectly_swappable
 * indirectly_comparable
+* permutable
 * mergeable
 * sortable
