@@ -163,9 +163,9 @@ template <class In, class Out>
     cmb::indirectly_writable<Out, std::iter_rvalue_reference_t<In>>;
 
 
-// concept indirectly_moveable_storable
+// concept indirectly_movable_storable
 template <class In, class Out>
-  concept indirectly_moveable_storable =
+  concept indirectly_movable_storable =
     cmb::indirectly_movable<In, Out> and
     cmb::indirectly_writable<Out, std::iter_value_t<In>> and
     cmb::movable<std::iter_value_t<In>> and
@@ -195,23 +195,55 @@ template <class In, class Out>
     cmb::assignable_from<std::iter_value_t<In>&, std::iter_reference_t<In>>;
 
 
-
 // concept indirectly_swappable
+template <class I1, class I2 = I1>
+  concept indirectly_swappable =
+    cmb::indirectly_readable<I1> and
+    cmb::indirectly_readable<I2> and
+    requires( I1 const i1, I2 const i2) {
+      std::ranges::iter_swap(i1, i1);
+      std::ranges::iter_swap(i2, i2);
+      std::ranges::iter_swap(i1, i2);
+      std::ranges::iter_swap(i2, i1);
+    };
+
 
 // concept indirectly_comparable
+template <class I1, class I2, class R, class P1 = std::identity,
+          class P2 = std::identity>
+  concept indirectly_comparable =
+    std::indirect_binary_predicate<R, // STD not CMB
+                                   std::projected<I1, P1>,
+                                   std::projected<I2, P2>>;
+
+
+// concept permutable
+template <class I>
+  concept permutable =
+    std::forward_iterator<I> and // STD not CMB
+    cmb::indirectly_moveable_storable<I, I> and
+    cmb::indirectly_swappable<I, I>;
 
 
 // concept mergeable
-
+template <class I1, class I2, class Out, class R = std::ranges::less,
+          class P1 = std::identity, class P2 = std::identity>
+  concept mergeable =
+    std::input_iterator<I1> and            // STD not CMB
+    std::input_iterator<I2> and            // STD not CMB
+    std::weakly_incrementable<Out> and     // STD not CMB
+    cmb::indirectly_copyable<I1, Out> and
+    cmb::indirectly_copyable<I2, Out> and
+    std::indirect_strict_weak_order<R,     // STD not CMB
+                                    std::projected<I1, P1>,
+                                    std::projected<I2, P2>>;
 
 
 // concept sortable
 template <class I, class R = std::ranges::less, class P = std::identity>
   concept sortable =
-    std::permutable<I> and
-    std::indirect_strict_weak_order<R, std::projected<I, P>>;
-
-
+    std::permutable<I> and                                    // STD not CMB
+    std::indirect_strict_weak_order<R, std::projected<I, P>>; // STD not CMB
 
 } // namespace cmb
 
