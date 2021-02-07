@@ -1,9 +1,9 @@
-# C++20 Concepts
+# C++20 Concepts Library
+My implementation of the C++20 Concepts Library.  The following concepts are defined in the respective header files listed below.  Each header file has been tested with GCC 10.2 using the `-std=c++20` flag.
 
+## concepts.hxx
 
-### `<concepts.hxx>`
-
-#### Language related concepts
+### Language related concepts
 * same_as
 * derived_from
 * convertible_to
@@ -36,9 +36,9 @@
 * strict_weak_order
 * TODO
 
-### `<iterator_concepts.hxx>`
+## iterator_concepts.hxx
 
-#### Iterator concepts
+### Iterator concepts
 * indirectly_readable
 * indirectly_writable
 * weakly_incrementable
@@ -53,7 +53,7 @@
 * random_access_iterator
 * contiguous_iterator
 
-#### Indirect callable requirements
+### Indirect callable requirements
 * indirectly_unary_invocable
 * indirectly_regular_unary_invocable
 * indirect_unary_predicate
@@ -61,7 +61,7 @@
 * indirect_equivalence_relation
 * indirect_strict_weak_order
 
-#### Common algorithm requirements
+### Common algorithm requirements
 * indirectly_movable
 * indirectly_copyable
 * indirectly_swappable
