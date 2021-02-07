@@ -129,11 +129,29 @@ template <class I, class T>
 // Indirect callable requirements
 
 // concept indirectly_unary_invocable
-
+template <class F, class I>
+  concept indirectly_­unary_­invocable =
+    cmb::indirectly_readable<I> and
+    cmb::copy_constructible<F> and
+    cmb::invocable<F&, std::iter_value_t<I>&> and
+    cmb::invocable<F&, std::iter_reference_t<I>> and
+    cmb::invocable<F&, std::iter_common_reference_t<I>> and
+    cmb::common_reference_with<
+      std::invoke_result_t<F&, std::iter_value_t<I>&>,
+      std::invoke_result_t<F&, std::iter_reference_t<I>>>;
 
 
 // concept indirectly_regular_unary_invocable
-
+template <class F, class I>
+  concept indirectly_­regular_­unary_­invocable =
+    cmb::indirectly_readable<I> and
+    cmb::copy_constructible<F> and
+    cmb::regular_invocable<F&, std::iter_value_t<I>&> and
+    cmb::regular_invocable<F&, std::iter_reference_t<I>> and
+    cmb::regular_invocable<F&, std::iter_common_reference_t<I>> and
+    cmb::common_reference_with<
+      std::invoke_result_t<F&, std::iter_value_t<I>&>,
+      std::invoke_result_t<F&, std::iter_reference_t<I>>>;
 
 
 // concept indirect_unary_predicate
@@ -169,8 +187,12 @@ template <class In, class Out>
     cmb::indirectly_movable<In, Out> and
     cmb::indirectly_writable<Out, std::iter_value_t<In>> and
     cmb::movable<std::iter_value_t<In>> and
-    cmb::constructible_from<std::iter_value_t<In>, std::iter_rvalue_reference_t<In>> and
-    cmb::assignable_from<std::iter_value_t<In>&, std::iter_rvalue_reference_t<In>>;
+    cmb::constructible_from<
+      std::iter_value_t<In>,
+      std::iter_rvalue_reference_t<In>> and
+    cmb::assignable_from<
+      std::iter_value_t<In>&,
+      std::iter_rvalue_reference_t<In>>;
 
 
 // concept indirectly_copyable
@@ -192,7 +214,9 @@ template <class In, class Out>
     cmb::constructible_from<
       std::iter_value_t<In>,
       std::iter_reference_t<In>> and
-    cmb::assignable_from<std::iter_value_t<In>&, std::iter_reference_t<In>>;
+    cmb::assignable_from<
+      std::iter_value_t<In>&,
+      std::iter_reference_t<In>>;
 
 
 // concept indirectly_swappable
@@ -221,7 +245,7 @@ template <class I1, class I2, class R, class P1 = std::identity,
 template <class I>
   concept permutable =
     std::forward_iterator<I> and // STD not CMB
-    cmb::indirectly_moveable_storable<I, I> and
+    cmb::indirectly_movable_storable<I, I> and
     cmb::indirectly_swappable<I, I>;
 
 
