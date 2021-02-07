@@ -88,13 +88,24 @@ template <class S, class I>
       { i - s } -> cmb::same_as<std::iter_difference_t<I>>;
     };
 
-
+/*
 // concept input_iterator
-
-
+template <class I>
+  concept input_iterator =
+    cmb::input_or_output_iterator<I> and
+    cmb::indirectly_readable<I> and
+    requires { typename ITER_CONCEPT(I); } and
+    cmb::derived_from<ITER_CONCEPT(I), std::input_iterator_tag>;
+*/
 
 // concept output_iterator
-
+template <class I, class T>
+  concept output_iterator =
+    cmb::input_or_output_iterator<I> and
+    cmb::indirectly_writable<I, T> and
+    requires(I i, T&& t) {
+      *i++ = std::forward<T>(t);
+    };
 
 
 // concept forward_iterator
