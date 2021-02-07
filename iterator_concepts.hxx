@@ -32,9 +32,17 @@ template <class In>
     cmb::detail::indirectly_readable_impl<std::remove_cvref_t<In>>;
 
 
-
 // concept indirectly_writable
-
+template <class Out, class T>
+  concept indirectly_writable =
+    requires(Out&& o, T&& t) {
+      *o = std::forward<T>(t);
+      *std::forward<Out>(o) = std::forward<T>(t);
+      const_cast<std::iter_reference_t<Out> const&&>(*o)
+        = std::forward<T>(t);
+      const_cast<std::iter_reference_t<Out> const&&>(*std::forward<Out>(o))
+        = std::forward<T>(t);
+    };
 
 
 // concept weakly_incrementable
@@ -42,7 +50,13 @@ template <class In>
 
 
 // concept incrementable
-
+template <class I>
+  concept incrementable =
+    cmb::regular<I> and
+    std::weakly_incrementable<I> and // defined using STD:: not CMB::
+    requires(I i) {
+      { i++ } -> cmb::same_as<I>;
+    };
 
 
 // concept input_or_output_iterator
