@@ -155,7 +155,7 @@ template <class F, class I>
 
 
 // concept indirect_unary_predicate
-template<class F, class I>
+template <class F, class I>
   concept indirect_unary_predicate =
     cmb::indirectly_readable<I> and
     cmb::copy_constructible<F> and
@@ -165,7 +165,7 @@ template<class F, class I>
 
 
 // concept indirect_binary_predicate
-template<class F, class I1, class I2>
+template <class F, class I1, class I2>
   concept indirect_binary_predicate =
     cmb::indirectly_readable<I1> and
     cmb::indirectly_readable<I2> and
@@ -178,11 +178,29 @@ template<class F, class I1, class I2>
 
 
 // concept indirect_equivalence_relation
-
+template <class F, class I1, class I2 = I1>
+  concept indirect_equivalence_relation =
+    cmb::indirectly_readable<I1> and
+    cmb::indirectly_readable<I2> and
+    cmb::copy_constructible<F> and
+    cmb::equivalence_relation<F&, std::iter_value_t<I1>&, std::iter_value_t<I2>&> and
+    cmb::equivalence_relation<F&, std::iter_value_t<I1>&, std::iter_reference_t<I2>> and
+    cmb::equivalence_relation<F&, std::iter_reference_t<I1>, std::iter_value_t<I2>&> and
+    cmb::equivalence_relation<F&, std::iter_reference_t<I1>, std::iter_reference_t<I2>> and
+    cmb::equivalence_relation<F&, std::iter_common_reference_t<I1>, std::iter_common_reference_t<I2>>;
 
 
 // concept indirect_strict_weak_order
-
+template<class F, class I1, class I2 = I1>
+  concept indirect_strict_Weak_order =
+    cmb::indirectly_readable<I1> and
+    cmb::indirectly_readable<I2> and
+    cmb::copy_constructible<F> and
+    cmb::strict_weak_order<F&, std::iter_value_t<I1>&, std::iter_value_t<I2>&> and
+    cmb::strict_weak_order<F&, std::iter_value_t<I1>&, std::iter_reference_t<I2>> and
+    cmb::strict_weak_order<F&, std::iter_reference_t<I1>, std::iter_value_t<I2>&> and
+    cmb::strict_weak_order<F&, std::iter_reference_t<I1>, std::iter_reference_t<I2>> and
+    cmb::strict_weak_order<F&, std::iter_common_reference_t<I1>, std::iter_common_reference_t<I2>>;
 
 
 
