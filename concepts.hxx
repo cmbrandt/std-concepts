@@ -72,7 +72,7 @@ template <class T, class U>
         std::add_lvalue_reference_t<U const>>>;
 
 
-// concept common_with
+// concept integral
 template <class T>
   concept integral = std::is_integral_v<T>;
 
@@ -122,9 +122,9 @@ template <class T, class U>
     cmb::common_reference_with<T, U> and
     requires(T&& t, U&& u) {
       std::ranges::swap(std::forward<T>(t), std::forward<T>(t));
-      std::ranges::swap(std::forward<T>(u), std::forward<T>(u));
-      std::ranges::swap(std::forward<T>(t), std::forward<T>(u));
-      std::ranges::swap(std::forward<T>(u), std::forward<T>(t));
+      std::ranges::swap(std::forward<U>(u), std::forward<U>(u));
+      std::ranges::swap(std::forward<T>(t), std::forward<U>(u));
+      std::ranges::swap(std::forward<U>(u), std::forward<T>(t));
     };
 
 
@@ -146,7 +146,7 @@ template <class T>
     cmb::constructible_from<T> and
     requires {
       T{ };
-      ::new (static_cast<void*>(nullptr)) T;
+      (void) ::new T;
     };
 
 
