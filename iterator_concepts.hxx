@@ -24,7 +24,7 @@ namespace detail
 
 
   //
-  // alias template ITER_CONCEPT(I)
+  // alias template ITER_CONCEPT(I), using facilities defined with libstdc++
 
   template <class I>
     struct iter_concept_impl;
@@ -91,7 +91,8 @@ namespace detail
   // helper concept is_signed_integer_like
 
   template <class T>
-    concept is_signed_integer_like = std::__detail::__is_signed_integer_like<T>;
+    concept is_signed_integer_like =
+      std::__detail::__is_signed_integer_like<T>; // defined within libstdc++
 
 } // namespace detail
 
