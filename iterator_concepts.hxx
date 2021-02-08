@@ -1,7 +1,7 @@
 #ifndef ITERATOR_CONCEPTS_HXX
 #define ITERATOR_CONCEPTS_HXX
 
-#include <concepts.hxx> // REMOVE AFTER COMPLETING ITERATOR CONCEPTS
+#include <concepts.hxx>
 
 
 namespace cmb {
@@ -9,9 +9,23 @@ namespace cmb {
 //
 // Iterator concepts
 
-// concept indirectly_readable
+
 namespace detail
 {
+  //
+  // helper concept can_reference
+
+  template <class T>
+    using with_reference = T&;
+
+  template <class T>
+    concept can_reference =
+      requires { typename cmb::detail::with_reference<T>; };
+
+
+  //
+  // alias template ITER_CONCEPT(I)
+
   template <class I>
     struct iter_concept_impl;
 
@@ -50,6 +64,9 @@ namespace detail
     using iter_concept = typename cmb::detail::iter_concept_impl<I>::type;
 
 
+  //
+  // helper concept indirectly_readable_impl
+
   template <class In>
     concept indirectly_readable_impl =
       requires(In const in) {
@@ -68,8 +85,18 @@ namespace detail
       cmb::common_reference_with<
         std::iter_rvalue_reference_t<In>&&,
         std::iter_value_t<In> const&>;
+
+
+  //
+  // helper concept is_signed_integer_like
+
+  template <class T>
+    concept is_signed_integer_like = std::__detail::__is_signed_integer_like<T>;
+
 } // namespace detail
 
+
+// concept indirectly_readable
 template <class In>
   concept indirectly_readable = 
     cmb::detail::indirectly_readable_impl<std::remove_cvref_t<In>>;
@@ -89,14 +116,22 @@ template <class Out, class T>
 
 
 // concept weakly_incrementable
-
-
+template<class I>
+  concept weakly_incrementable =
+    cmb::default_initializable<I> and
+    cmb::movable<I> and
+    requires(I i) {
+      typename std::iter_difference_t<I>;
+      requires cmb::detail::is_signed_integer_like<std::iter_difference_t<I>>;
+      { ++i } -> cmb::same_as<I&>;
+      i++;
+    };
 
 // concept incrementable
 template <class I>
   concept incrementable =
     cmb::regular<I> and
-    std::weakly_incrementable<I> and // defined using STD:: not CMB::
+    cmb::weakly_incrementable<I> and
     requires(I i) {
       { i++ } -> cmb::same_as<I>;
     };
@@ -106,9 +141,9 @@ template <class I>
 template <class I>
   concept input_or_output_iterator =
     requires(I i) {
-      { *i } -> std::__detail::__can_reference; // using gcc intrinsic..
+      { *i } -> cmb::detail::can_reference;
     } and
-    std::weakly_incrementable<I>; // STD:: not CMB::
+    cmb::weakly_incrementable<I>;
 
 
 // concept sentinel_for
@@ -161,16 +196,43 @@ template <class I>
 
 
 // concept bidirectional_iterator
-
+template<class I>
+  concept bidirectional_iterator =
+    cmb::forward_iterator<I> and
+    cmb::derived_from<cmb::detail::iter_concept<I>, std::bidirectional_iterator_tag> and
+    requires(I i) {
+      { --i } -> cmb::same_as<I&>;
+      { i-- } -> cmb::same_as<I>;
+    };
 
 
 // concept random_access_iterator
-
+template<class I>
+  concept random_access_iterator =
+    cmb::bidirectional_iterator<I> and
+    cmb::derived_from<cmb::detail::iter_concept<I>, std::random_access_iterator_tag> and
+    cmb::totally_ordered<I> and
+    cmb::sized_sentinel_for<I, I> and
+    requires(I i, I const j, std::iter_difference_t<I> const n) {
+      { i += n } -> cmb::same_as<I&>;
+      { j +  n } -> cmb::same_as<I>;
+      { n +  j } -> cmb::same_as<I>;
+      { i -= n } -> cmb::same_as<I&>;
+      { j -  n } -> cmb::same_as<I>;
+      {  j[n]  } -> cmb::same_as<std::iter_reference_t<I>>;
+    };
 
 
 // concept contiguous_iterator
-
-
+template<class I>
+  concept contiguous_­iterator =
+    cmb::random_access_iterator<I> and
+    cmb::derived_from<cmb::detail::iter_concept<I>, std::contiguous_iterator_tag> and
+    std::is_lvalue_reference_v<std::iter_reference_t<I>> and
+    cmb::same_as<std::iter_value_t<I>, std::remove_cvref_t<std::iter_reference_t<I>>> and
+    requires(const I& i) {
+      { to_address(i) } -> cmb::same_as<std::add_pointer_t<std::iter_reference_t<I>>>;
+    };
 
 
 //
@@ -240,7 +302,7 @@ template <class F, class I1, class I2 = I1>
 
 // concept indirect_strict_weak_order
 template<class F, class I1, class I2 = I1>
-  concept indirect_strict_Weak_order =
+  concept indirect_strict_weak_order =
     cmb::indirectly_readable<I1> and
     cmb::indirectly_readable<I2> and
     cmb::copy_constructible<F> and
@@ -316,7 +378,7 @@ template <class I1, class I2 = I1>
 template <class I1, class I2, class R, class P1 = std::identity,
           class P2 = std::identity>
   concept indirectly_comparable =
-    std::indirect_binary_predicate<R, // STD not CMB
+    cmb::indirect_binary_predicate<R,
                                    std::projected<I1, P1>,
                                    std::projected<I2, P2>>;
 
@@ -324,7 +386,7 @@ template <class I1, class I2, class R, class P1 = std::identity,
 // concept permutable
 template <class I>
   concept permutable =
-    std::forward_iterator<I> and // STD not CMB
+    cmb::forward_iterator<I> and
     cmb::indirectly_movable_storable<I, I> and
     cmb::indirectly_swappable<I, I>;
 
@@ -333,12 +395,12 @@ template <class I>
 template <class I1, class I2, class Out, class R = std::ranges::less,
           class P1 = std::identity, class P2 = std::identity>
   concept mergeable =
-    std::input_iterator<I1> and            // STD not CMB
-    std::input_iterator<I2> and            // STD not CMB
-    std::weakly_incrementable<Out> and     // STD not CMB
+    cmb::input_iterator<I1> and
+    cmb::input_iterator<I2> and
+    cmb::weakly_incrementable<Out> and
     cmb::indirectly_copyable<I1, Out> and
     cmb::indirectly_copyable<I2, Out> and
-    std::indirect_strict_weak_order<R,     // STD not CMB
+    cmb::indirect_strict_weak_order<R,
                                     std::projected<I1, P1>,
                                     std::projected<I2, P2>>;
 
@@ -346,8 +408,8 @@ template <class I1, class I2, class Out, class R = std::ranges::less,
 // concept sortable
 template <class I, class R = std::ranges::less, class P = std::identity>
   concept sortable =
-    std::permutable<I> and                                    // STD not CMB
-    std::indirect_strict_weak_order<R, std::projected<I, P>>; // STD not CMB
+    cmb::permutable<I> and
+    cmb::indirect_strict_weak_order<R, std::projected<I, P>>;
 
 } // namespace cmb
 
