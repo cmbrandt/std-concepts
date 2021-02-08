@@ -1,7 +1,7 @@
 #ifndef ITERATOR_HXX
 #define ITERATOR_HXX
 
-#include <concepts.hxx>
+#include <iterator_internal.hxx>
 
 
 namespace cmb {
@@ -10,99 +10,7 @@ namespace cmb {
 // Iterator concepts
 
 
-namespace detail
-{
-  //
-  // helper concept can_reference
 
-  template <class T>
-    using with_reference = T&;
-
-  template <class T>
-    concept can_reference =
-      requires { typename cmb::detail::with_reference<T>; };
-
-
-  // ...
-  template <class I>
-    concept primary_traits_iter =
-      std::is_base_of_v<
-        std::iterator_traits<I, void>,
-        std::iterator_traits<I>>;
-
-
-  //
-  // alias template ITER_CONCEPT(I)
-
-  template <class I>
-    struct iter_concept_impl;
-
-  // ITER_CONCEPT(I) is std::iterator_traits(I)::iterator_concept if that is valid.
-  template <class I>
-    requires ( requires { typename std::iterator_traits<I>::iterator_concept; } )
-    struct iter_concept_impl<I> {
-      using type = typename std::iterator_traits<I>::iterator_concept;
-    };
-
-  // Otherwise, if the qualified-id ITER_TRAITS(I)::iterator_category is valid,
-  // and names a type, then ITER_CONCEPT(I) denotes that type.
-  template <class I>
-    requires ( not requires { typename std::iterator_traits<I>::iterator_concept;  } and
-                   requires { typename std::iterator_traits<I>::iterator_category; } )
-    struct iter_concept_impl<I> {
-      using type = typename std::iterator_traits<I>::iterator_category;
-    };
-
-  // Otherwise, if iterator_traits<I> names a specialization generated from the
-  // primary template, then ITER_CONCEPT(I) denotes random_access_iterator_tag.
-  template <class I>
-    requires ( not requires { typename std::iterator_traits<I>::iterator_concept;  } and
-               not requires { typename std::iterator_traits<I>::iterator_category; } and
-               std::__detail::__primary_traits_iter<I> ) // defined with libstdc++
-    struct iter_concept_impl<I> {
-      using type = std::random_access_iterator_tag;
-    };
-
-  // Otherwise, ITER_CONCEPT(I) does not denote a type.
-  template <class I>
-    struct iter_concept_impl { };
-
-  // ITER_CONCEPT
-  template <class I>
-    using iter_concept = typename cmb::detail::iter_concept_impl<I>::type;
-
-
-  //
-  // helper concept indirectly_readable_impl
-
-  template <class In>
-    concept indirectly_readable_impl =
-      requires(In const in) {
-        typename std::iter_value_t<In>;
-        typename std::iter_reference_t<In>;
-        typename std::iter_rvalue_reference_t<In>;
-        { *in } -> cmb::same_as<std::iter_reference_t<In>>;
-        { std::ranges::iter_move(in) } -> cmb::same_as<std::iter_rvalue_reference_t<In>>;
-    } and
-      cmb::common_reference_with<
-        std::iter_reference_t<In>&&,
-        std::iter_value_t<In>&> and
-      cmb::common_reference_with<
-        std::iter_reference_t<In>&&,
-        std::iter_rvalue_reference_t<In>&&> and
-      cmb::common_reference_with<
-        std::iter_rvalue_reference_t<In>&&,
-        std::iter_value_t<In> const&>;
-
-
-  //
-  // helper concept is_signed_integer_like
-
-  template <class T>
-    concept is_signed_integer_like =
-      std::__detail::__is_signed_integer_like<T>; // defined within libstdc++
-
-} // namespace detail
 
 
 // concept indirectly_readable
