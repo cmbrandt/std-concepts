@@ -31,25 +31,25 @@ namespace detail
 
   // ITER_CONCEPT(I) is ITER_TRAITS(I)::iterator_concept is that is valid.
   template <class I>
-    requires ( requires { typename std::/*__detail::__iter_traits*/iterator_traits<I>::iterator_concept; } )
+    requires ( requires { typename std::iterator_traits<I>::iterator_concept; } )
     struct iter_concept_impl<I> {
-      using type = typename std::/*__detail::__iter_traits*/iterator_traits<I>::iterator_concept;
+      using type = typename std::iterator_traits<I>::iterator_concept;
     };
 
   // Otherwise, if the qualified-id ITER_TRAITS(!)::iterator_category is valid,
   // and names a type, then ITER_CONCEPT(I) denotes that type.
   template <class I>
-    requires ( not requires { typename std::/*__detail::__iter_traits*/iterator_traits<I>::iterator_concept;  }
-               and requires { typename std::/*__detail::__iter_traits*/iterator_traits<I>::iterator_category; } )
+    requires ( not requires { typename std::iterator_traits<I>::iterator_concept;  }
+               and requires { typename std::iterator_traits<I>::iterator_category; } )
     struct iter_concept_impl<I> {
-      using type = typename std::/*__detail::__iter_traits*/iterator_traits<I>::iterator_category;
+      using type = typename std::iterator_traits<I>::iterator_category;
     };
 
   // Otherwise, if iterator_traits<I> names a specialization generated from the
   // primary template, then ITER_CONCEPT(I) denotes random_access_iterator_tag.
   template <class I>
-    requires ( not requires { typename std::/*__detail::__iter_traits*/iterator_traits<I>::iterator_concept;  } and
-               not requires { typename std::/*__detail::__iter_traits*/iterator_traits<I>::iterator_category; } and
+    requires ( not requires { typename std::iterator_traits<I>::iterator_concept;  } and
+               not requires { typename std::iterator_traits<I>::iterator_category; } and
                std::__detail::__primary_traits_iter<I> )
     struct iter_concept_impl<I> {
       using type = std::random_access_iterator_tag;
