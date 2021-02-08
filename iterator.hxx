@@ -1,5 +1,5 @@
-#ifndef ITERATOR_CONCEPTS_HXX
-#define ITERATOR_CONCEPTS_HXX
+#ifndef ITERATOR_HXX
+#define ITERATOR_HXX
 
 #include <concepts.hxx>
 
@@ -23,24 +23,32 @@ namespace detail
       requires { typename cmb::detail::with_reference<T>; };
 
 
+  // ...
+  template <class I>
+    concept primary_traits_iter =
+      std::is_base_of_v<
+        std::iterator_traits<I, void>,
+        std::iterator_traits<I>>;
+
+
   //
-  // alias template ITER_CONCEPT(I), using facilities defined with libstdc++
+  // alias template ITER_CONCEPT(I)
 
   template <class I>
     struct iter_concept_impl;
 
-  // ITER_CONCEPT(I) is ITER_TRAITS(I)::iterator_concept is that is valid.
+  // ITER_CONCEPT(I) is std::iterator_traits(I)::iterator_concept if that is valid.
   template <class I>
     requires ( requires { typename std::iterator_traits<I>::iterator_concept; } )
     struct iter_concept_impl<I> {
       using type = typename std::iterator_traits<I>::iterator_concept;
     };
 
-  // Otherwise, if the qualified-id ITER_TRAITS(!)::iterator_category is valid,
+  // Otherwise, if the qualified-id ITER_TRAITS(I)::iterator_category is valid,
   // and names a type, then ITER_CONCEPT(I) denotes that type.
   template <class I>
-    requires ( not requires { typename std::iterator_traits<I>::iterator_concept;  }
-               and requires { typename std::iterator_traits<I>::iterator_category; } )
+    requires ( not requires { typename std::iterator_traits<I>::iterator_concept;  } and
+                   requires { typename std::iterator_traits<I>::iterator_category; } )
     struct iter_concept_impl<I> {
       using type = typename std::iterator_traits<I>::iterator_category;
     };
@@ -50,7 +58,7 @@ namespace detail
   template <class I>
     requires ( not requires { typename std::iterator_traits<I>::iterator_concept;  } and
                not requires { typename std::iterator_traits<I>::iterator_category; } and
-               std::__detail::__primary_traits_iter<I> )
+               std::__detail::__primary_traits_iter<I> ) // defined with libstdc++
     struct iter_concept_impl<I> {
       using type = std::random_access_iterator_tag;
     };
@@ -75,7 +83,7 @@ namespace detail
         typename std::iter_rvalue_reference_t<In>;
         { *in } -> cmb::same_as<std::iter_reference_t<In>>;
         { std::ranges::iter_move(in) } -> cmb::same_as<std::iter_rvalue_reference_t<In>>;
-    } &&
+    } and
       cmb::common_reference_with<
         std::iter_reference_t<In>&&,
         std::iter_value_t<In>&> and
