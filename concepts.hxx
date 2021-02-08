@@ -244,7 +244,7 @@ template <class T>
     cmb::detail::partially_ordered_with<T, T>;
 
 
-// totally_ordered_with
+// concept totally_ordered_with
 template <class T, class U>
   concept totally_ordered_with =
     cmb::totally_ordered<T> and

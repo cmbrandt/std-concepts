@@ -1,7 +1,7 @@
 #ifndef ITERATOR_CONCEPTS_HXX
 #define ITERATOR_CONCEPTS_HXX
 
-#include <concepts.hxx>
+#include <concepts.hxx> // REMOVE AFTER COMPLETING ITERATOR CONCEPTS
 
 
 namespace cmb {
@@ -18,13 +18,18 @@ namespace detail
         typename std::iter_value_t<In>;
         typename std::iter_reference_t<In>;
         typename std::iter_rvalue_reference_t<In>;
-        requires cmb::same_as<std::iter_reference_t<In const>,
-                              std::iter_reference_t<In>>;
-      } and
-      cmb::common_reference_with<std::iter_reference_t<In>&&,
-                                 std::iter_value_t<In>&> and
-      cmb::common_reference_with<std::iter_rvalue_reference_t<In>&&,
-                                 std::iter_value_t<In> const&>;
+        { *in } -> cmb::same_as<std::iter_reference_t<In>>;
+        { std::ranges::iter_move(in) } -> cmb::same_as<std::iter_rvalue_reference_t<In>>;
+    } &&
+      cmb::common_reference_with<
+        std::iter_reference_t<In>&&,
+        std::iter_value_t<In>&> and
+      cmb::common_reference_with<
+        std::iter_reference_t<In>&&,
+        std::iter_rvalue_reference_t<In>&&> and
+      cmb::common_reference_with<
+        std::iter_rvalue_reference_t<In>&&,
+        std::iter_value_t<In> const&>;
 } // namespace detail
 
 template <class In>
@@ -38,10 +43,10 @@ template <class Out, class T>
     requires(Out&& o, T&& t) {
       *o = std::forward<T>(t);
       *std::forward<Out>(o) = std::forward<T>(t);
-      const_cast<std::iter_reference_t<Out> const&&>(*o)
-        = std::forward<T>(t);
-      const_cast<std::iter_reference_t<Out> const&&>(*std::forward<Out>(o))
-        = std::forward<T>(t);
+      const_cast<std::iter_reference_t<Out> const&&>(*o) =
+        std::forward<T>(t);
+      const_cast<std::iter_reference_t<Out> const&&>(*std::forward<Out>(o)) =
+        std::forward<T>(t);
     };
 
 
@@ -201,7 +206,6 @@ template<class F, class I1, class I2 = I1>
     cmb::strict_weak_order<F&, std::iter_reference_t<I1>, std::iter_value_t<I2>&> and
     cmb::strict_weak_order<F&, std::iter_reference_t<I1>, std::iter_reference_t<I2>> and
     cmb::strict_weak_order<F&, std::iter_common_reference_t<I1>, std::iter_common_reference_t<I2>>;
-
 
 
 //
