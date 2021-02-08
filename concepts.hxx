@@ -29,8 +29,7 @@ template <class T, class U>
 template <class Derived, class Base>
   concept derived_from =
     std::is_base_of_v<Base, Derived> and
-    std::is_convertible_v<const volatile Derived*, const volatile Base*>;
-    //std::is_convertible_v<Derived const* volatile, Base const* volatile>;
+    std::is_convertible_v<Derived const volatile*, Base const volatile*>;
 
 
 // concept convertible_to
