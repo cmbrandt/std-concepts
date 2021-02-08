@@ -12,6 +12,44 @@ namespace cmb {
 // concept indirectly_readable
 namespace detail
 {
+  template <class I>
+    struct iter_concept_impl;
+
+  // ITER_CONCEPT(I) is ITER_TRAITS(I)::iterator_concept is that is valid.
+  template <class I>
+    requires ( requires { typename std::__detail::__iter_traits<I>::iterator_concept; } )
+    struct iter_concept_impl<I> {
+      using type = typename std::__detail::__iter_traits<I>::iterator_concept;
+    };
+
+  // Otherwise, if the qualified-id ITER_TRAITS(!)::iterator_category is valid,
+  // and names a type, then ITER_CONCEPT(I) denotes that type.
+  template <class I>
+    requires ( not requires { typename std::__detail::__iter_traits<I>::iterator_concept;  }
+               and requires { typename std::__detail::__iter_traits<I>::iterator_category; } )
+    struct iter_concept_impl<I> {
+      using type = typename std::__detail::__iter_traits<I>::iterator_category;
+    };
+
+  // Otherwise, if iterator_traits<I> names a specialization generated from the
+  // primary template, then ITER_CONCEPT(I) denotes random_access_iterator_tag.
+  template <class I>
+    requires ( not requires { typename std::__detail::__iter_traits<I>::iterator_concept;  } and
+               not requires { typename std::__detail::__iter_traits<I>::iterator_category; } and
+               std::__detail::__primary_traits_iter<I> )
+    struct iter_concept_impl<I> {
+      using type = std::random_access_iterator_tag;
+    };
+
+  // Otherwise, ITER_CONCEPT(I) does not denote a type.
+  template <class I>
+    struct iter_concept_impl { };
+
+  // ITER_CONCEPT
+  template <class I>
+    using iter_concept = typename cmb::detail::iter_concept_impl<I>::type;
+
+
   template <class In>
     concept indirectly_readable_impl =
       requires(In const in) {
@@ -93,15 +131,15 @@ template <class S, class I>
       { i - s } -> cmb::same_as<std::iter_difference_t<I>>;
     };
 
-/*
+
 // concept input_iterator
 template <class I>
   concept input_iterator =
     cmb::input_or_output_iterator<I> and
     cmb::indirectly_readable<I> and
-    requires { typename ITER_CONCEPT(I); } and
-    cmb::derived_from<ITER_CONCEPT(I), std::input_iterator_tag>;
-*/
+    requires { typename cmb::detail::iter_concept<I>; } and
+    cmb::derived_from<cmb::detail::iter_concept<I>, std::input_iterator_tag>;
+
 
 // concept output_iterator
 template <class I, class T>
@@ -114,7 +152,12 @@ template <class I, class T>
 
 
 // concept forward_iterator
-
+template <class I>
+  concept forward_iterator =
+    cmb::input_iterator<I> and
+    cmb::derived_from<cmb::detail::iter_concept<I>, std::forward_iterator_tag> and
+    cmb::incrementable<I> and
+    cmb::sentinel_for<I, I>;
 
 
 // concept bidirectional_iterator
