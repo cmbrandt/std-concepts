@@ -10,11 +10,13 @@ My implementation of the C++20 Concepts Library.  The following concepts are def
 * common_reference_with
 * common_with
 
-#### Arithmetic concepts
+##### Arithmetic concepts
 * integral
 * signed_integral
 * unsigned_integral
 * floating_point
+
+
 
 * assignable_from
 * swappable
@@ -25,7 +27,7 @@ My implementation of the C++20 Concepts Library.  The following concepts are def
 * move_constructible
 * copy_constructible
 
-#### Comparison concepts
+##### Comparison concepts
 * equality_comparable
 * equality_comparable_with
 * totally_ordered
