@@ -19,6 +19,7 @@ template <class T>
   concept can_reference =
     requires { typename cmb::detail::with_reference<T>; };
 
+
 //
 // alias template ITER_CONCEPT(I)
 
@@ -36,10 +37,8 @@ template <class I>
     using type = typename std::iterator_traits<I>::iterator_concept;
   };
 
-//
 // Omitting additional implementation requirements of ITER_CONCEPT(I) 
 // for the sake of simplicity
-//
 
 // Otherwise, ITER_­CONCEPT(I) does not denote a type.
 template <class I>

@@ -9,10 +9,6 @@ namespace cmb {
 //
 // Iterator concepts
 
-
-
-
-
 // concept indirectly_readable
 template <class In>
   concept indirectly_readable = 
@@ -43,6 +39,7 @@ template<class I>
       { ++i } -> cmb::same_as<I&>;
       i++;
     };
+
 
 // concept incrementable
 template <class I>
