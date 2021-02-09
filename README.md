@@ -9,10 +9,13 @@ My implementation of the C++20 Concepts Library.  The following concepts are def
 * convertible_to
 * common_reference_with
 * common_with
+
+#### Arithmetic concepts
 * integral
 * signed_integral
 * unsigned_integral
 * floating_point
+
 * assignable_from
 * swappable
 * swappable_with
@@ -21,14 +24,20 @@ My implementation of the C++20 Concepts Library.  The following concepts are def
 * default_initializable
 * move_constructible
 * copy_constructible
+
+#### Comparison concepts
 * equality_comparable
 * equality_comparable_with
 * totally_ordered
 * totally_ordered_with
+
+#### Object concepts
 * movable
 * copyable
 * semiregular
 * regular
+
+#### Callablel concepts
 * invocable
 * regular_invocable
 * predicate
@@ -36,7 +45,7 @@ My implementation of the C++20 Concepts Library.  The following concepts are def
 * equivalence_relation
 * strict_weak_order
 
-## iterator_concepts.hxx
+## iterator.hxx
 
 ### Iterator concepts
 * indirectly_readable
