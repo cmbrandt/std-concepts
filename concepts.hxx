@@ -185,6 +185,7 @@ namespace detail
       };
 }
 
+
 // concept equality_comparable
 namespace detail
 {

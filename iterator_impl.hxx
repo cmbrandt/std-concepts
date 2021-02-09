@@ -1,7 +1,6 @@
 #ifndef ITERATOR_IMPL_HXX
 #define ITERATOR_IMPL_HXX
 
-
 #include <concepts.hxx>
 
 
@@ -59,7 +58,7 @@ template <class In>
       typename std::iter_rvalue_reference_t<In>;
       { *in } -> cmb::same_as<std::iter_reference_t<In>>;
       { std::ranges::iter_move(in) } -> cmb::same_as<std::iter_rvalue_reference_t<In>>;
-  } and
+    } and
     cmb::common_reference_with<
       std::iter_reference_t<In>&&,
       std::iter_value_t<In>&> and

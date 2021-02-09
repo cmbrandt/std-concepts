@@ -139,7 +139,7 @@ template<class I>
 
 // concept contiguous_iterator
 template<class I>
-  concept contiguous_­iterator =
+  concept contiguous_iterator =
     cmb::random_access_iterator<I> and
     cmb::derived_from<cmb::detail::iter_concept<I>, std::contiguous_iterator_tag> and
     std::is_lvalue_reference_v<std::iter_reference_t<I>> and
@@ -154,7 +154,7 @@ template<class I>
 
 // concept indirectly_unary_invocable
 template <class F, class I>
-  concept indirectly_­unary_­invocable =
+  concept indirectly_unary_invocable =
     cmb::indirectly_readable<I> and
     cmb::copy_constructible<F> and
     cmb::invocable<F&, std::iter_value_t<I>&> and
@@ -167,7 +167,7 @@ template <class F, class I>
 
 // concept indirectly_regular_unary_invocable
 template <class F, class I>
-  concept indirectly_­regular_­unary_­invocable =
+  concept indirectly_regular_unary_invocable =
     cmb::indirectly_readable<I> and
     cmb::copy_constructible<F> and
     cmb::regular_invocable<F&, std::iter_value_t<I>&> and
@@ -292,9 +292,7 @@ template <class I1, class I2 = I1>
 template <class I1, class I2, class R, class P1 = std::identity,
           class P2 = std::identity>
   concept indirectly_comparable =
-    cmb::indirect_binary_predicate<R,
-                                   std::projected<I1, P1>,
-                                   std::projected<I2, P2>>;
+    cmb::indirect_binary_predicate<R, std::projected<I1, P1>, std::projected<I2, P2>>;
 
 
 // concept permutable
@@ -314,9 +312,7 @@ template <class I1, class I2, class Out, class R = std::ranges::less,
     cmb::weakly_incrementable<Out> and
     cmb::indirectly_copyable<I1, Out> and
     cmb::indirectly_copyable<I2, Out> and
-    cmb::indirect_strict_weak_order<R,
-                                    std::projected<I1, P1>,
-                                    std::projected<I2, P2>>;
+    cmb::indirect_strict_weak_order<R, std::projected<I1, P1>, std::projected<I2, P2>>;
 
 
 // concept sortable
