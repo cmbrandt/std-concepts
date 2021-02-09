@@ -3,7 +3,7 @@ My implementation of the C++20 Concepts Library.  The following concepts are def
 
 ## concepts.hxx
 
-### Language related concepts
+### Language-related concepts
 * same_as
 * derived_from
 * convertible_to
@@ -22,19 +22,19 @@ My implementation of the C++20 Concepts Library.  The following concepts are def
 * move_constructible
 * copy_constructible
 
-#### Comparison concepts
+### Comparison concepts
 * equality_comparable
 * equality_comparable_with
 * totally_ordered
 * totally_ordered_with
 
-#### Object concepts
+### Object concepts
 * movable
 * copyable
 * semiregular
 * regular
 
-#### Callable concepts
+### Callable concepts
 * invocable
 * regular_invocable
 * predicate
