@@ -1,12 +1,11 @@
-#ifndef ITERATOR_INTERNAL_HXX
-#define ITERATOR_INTERNAL_HXX
+#ifndef ITERATOR_IMPL_HXX
+#define ITERATOR_IMPL_HXX
 
 
 #include <concepts.hxx>
 
 
-namespace cmb {
-
+namespace cmb    {
 namespace detail {
 
 //
@@ -80,7 +79,6 @@ template <class T>
     std::__detail::__is_signed_integer_like<T>; // defined within libstdc++-v3
 
 } // namespace detail
-
 } // namespace cmb
 
 

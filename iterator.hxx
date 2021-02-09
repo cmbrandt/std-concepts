@@ -1,7 +1,7 @@
 #ifndef ITERATOR_HXX
 #define ITERATOR_HXX
 
-#include <iterator_internal.hxx>
+#include <iterator_impl.hxx>
 
 
 namespace cmb {
