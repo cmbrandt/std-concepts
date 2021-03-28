@@ -1,4 +1,8 @@
 # C++20 Concepts Library
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
+[![Standard](https://img.shields.io/badge/C%2B%2B-20-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization)
+
 My implementation of the C++20 Concepts Library.  The following concepts are defined in their respective header files listed below.  Each header file has been tested with GCC 10.2 using the `-std=c++20` flag.
 
 ## concepts.hxx
